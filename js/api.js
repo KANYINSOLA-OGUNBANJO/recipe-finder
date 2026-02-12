@@ -1,46 +1,16 @@
-/* ============================================
-   API Functions - FINAL VERSION WITH REAL IMAGES
-   ============================================ */
-
-const CONFIG = {
-    API_KEY: '1',
-    BASE_URL: 'https://www.themealdb.com/api/json/v1/1',
-    ENDPOINTS: {
-        SEARCH: '/search.php',
-        FILTER_BY_AREA: '/filter.php',
-        FILTER_BY_CATEGORY: '/filter.php',
-        MEAL_DETAILS: '/lookup.php',
-        RANDOM: '/random.php'
-    }
-};
-
-window.buildApiUrl = function(endpoint, params = {}) {
-    const url = new URL(`${CONFIG.BASE_URL}${endpoint}`);
-    Object.keys(params).forEach(key => {
-        if (params[key]) url.searchParams.append(key, params[key]);
-    });
-    return url.toString();
-};
-
-const FALLBACK_RECIPES = [
+const NIGERIAN_RECIPES = [
     {
         idMeal: '1001',
         strMeal: 'Jollof Rice',
         strCategory: 'Vegetarian',
         strArea: 'Nigerian',
         strMealThumb: 'https://www.abapoprestaurant.com/wp-content/uploads/2024/01/Jollof-Rice.jpg',
-        strInstructions: 'Heat oil in a large pot. Add onions and cook until soft. Add tomato paste, blended tomatoes, and peppers. Cook for 15-20 minutes until oil rises to the top. Add chicken stock, bay leaves, thyme, and curry powder. Add rice and stir well. Cover and cook on low heat for 30-40 minutes until rice is tender.',
+        strInstructions: 'Heat oil in a large pot. Add onions and cook until soft. Add tomato paste, blended tomatoes, and peppers. Cook for 15-20 minutes until oil rises to the top.',
         strYoutube: '',
         strIngredient1: 'Rice', strMeasure1: '3 cups',
         strIngredient2: 'Tomatoes', strMeasure2: '400g',
         strIngredient3: 'Peppers', strMeasure3: '3',
-        strIngredient4: 'Onions', strMeasure4: '2',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
+        strIngredient4: 'Onions', strMeasure4: '2'
     },
     {
         idMeal: '1002',
@@ -48,18 +18,11 @@ const FALLBACK_RECIPES = [
         strCategory: 'Beef',
         strArea: 'Nigerian',
         strMealThumb: 'https://bing.com/th?id=OSK.4e0bc4045b2edcce252a527bea98cbcb',
-        strInstructions: 'Season beef and cook until tender. Heat palm oil, add onions and egusi seeds. Add stock gradually. Add beef and fish. Add spinach. Cook for 10 minutes.',
+        strInstructions: 'Season beef and cook until tender. Heat palm oil, add onions and egusi seeds.',
         strYoutube: '',
         strIngredient1: 'Egusi', strMeasure1: '2 cups',
         strIngredient2: 'Beef', strMeasure2: '500g',
-        strIngredient3: 'Palm Oil', strMeasure3: '1/2 cup',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
+        strIngredient3: 'Palm Oil', strMeasure3: '1/2 cup'
     },
     {
         idMeal: '1003',
@@ -67,287 +30,92 @@ const FALLBACK_RECIPES = [
         strCategory: 'Beef',
         strArea: 'Nigerian',
         strMealThumb: 'https://bing.com/th?id=OSK.7f6125f28a6b5d918665c562b72a1cd1',
-        strInstructions: 'Slice beef into strips. Mix peanuts with spices. Coat beef with spice mix. Thread onto skewers. Grill for 15-20 minutes.',
+        strInstructions: 'Slice beef into strips. Mix peanuts with spices. Grill for 15-20 minutes.',
         strYoutube: '',
         strIngredient1: 'Beef', strMeasure1: '1kg',
         strIngredient2: 'Peanuts', strMeasure2: '1 cup',
-        strIngredient3: 'Paprika', strMeasure3: '2 tbsp',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1004',
-        strMeal: 'Pad Thai',
-        strCategory: 'Chicken',
-        strArea: 'Thai',
-        strMealThumb: 'https://images.pexels.com/photos/5409015/pexels-photo-5409015.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Soak noodles. Scramble eggs. Stir-fry chicken. Add noodles and sauce. Add peanuts.',
-        strYoutube: '',
-        strIngredient1: 'Noodles', strMeasure1: '200g',
-        strIngredient2: 'Chicken', strMeasure2: '300g',
-        strIngredient3: 'Eggs', strMeasure3: '2',
-        strIngredient4: 'Peanuts', strMeasure4: '1/4 cup',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1005',
-        strMeal: 'Thai Green Curry',
-        strCategory: 'Chicken',
-        strArea: 'Thai',
-        strMealThumb: 'https://images.pexels.com/photos/2662875/pexels-photo-2662875.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Heat coconut milk. Add curry paste. Add chicken. Add vegetables. Serve with rice.',
-        strYoutube: '',
-        strIngredient1: 'Chicken', strMeasure1: '400g',
-        strIngredient2: 'Coconut Milk', strMeasure2: '400ml',
-        strIngredient3: 'Curry Paste', strMeasure3: '3 tbsp',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1006',
-        strMeal: 'Tom Yum Soup',
-        strCategory: 'Seafood',
-        strArea: 'Thai',
-        strMealThumb: 'https://images.pexels.com/photos/539451/pexels-photo-539451.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Boil water. Add lemongrass. Add prawns. Add seasonings. Serve hot.',
-        strYoutube: '',
-        strIngredient1: 'Prawns', strMeasure1: '300g',
-        strIngredient2: 'Lemongrass', strMeasure2: '3 stalks',
-        strIngredient3: '', strMeasure3: '',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1007',
-        strMeal: 'Kung Pao Chicken',
-        strCategory: 'Chicken',
-        strArea: 'Chinese',
-        strMealThumb: 'https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Marinate chicken. Stir-fry. Add peanuts. Serve with rice.',
-        strYoutube: '',
-        strIngredient1: 'Chicken', strMeasure1: '500g',
-        strIngredient2: 'Peanuts', strMeasure2: '1/2 cup',
-        strIngredient3: '', strMeasure3: '',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1008',
-        strMeal: 'Sweet and Sour Pork',
-        strCategory: 'Pork',
-        strArea: 'Chinese',
-        strMealThumb: 'https://bing.com/th?id=OSK.45dc9fd7e1e79ad048223f0571a6b2ab',
-        strInstructions: 'Fry pork. Make sauce. Combine. Serve.',
-        strYoutube: '',
-        strIngredient1: 'Pork', strMeasure1: '500g',
-        strIngredient2: 'Pineapple', strMeasure2: '1 cup',
-        strIngredient3: '', strMeasure3: '',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1009',
-        strMeal: 'Mapo Tofu',
-        strCategory: 'Vegetarian',
-        strArea: 'Chinese',
-        strMealThumb: 'https://bing.com/th?id=OSK.c4b68c7586a13685039f64891e21ac1b',
-        strInstructions: 'Cook tofu. Add sauce. Serve with rice.',
-        strYoutube: '',
-        strIngredient1: 'Tofu', strMeasure1: '400g',
-        strIngredient2: 'Sauce', strMeasure2: '2 tbsp',
-        strIngredient3: '', strMeasure3: '',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1010',
-        strMeal: 'Classic Burger',
-        strCategory: 'Beef',
-        strArea: 'American',
-        strMealThumb: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Form patties. Grill. Assemble burger. Serve.',
-        strYoutube: '',
-        strIngredient1: 'Beef', strMeasure1: '500g',
-        strIngredient2: 'Buns', strMeasure2: '4',
-        strIngredient3: '', strMeasure3: '',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1011',
-        strMeal: 'BBQ Ribs',
-        strCategory: 'Pork',
-        strArea: 'American',
-        strMealThumb: 'https://images.pexels.com/photos/1251208/pexels-photo-1251208.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Season ribs. Bake. Brush with sauce. Grill. Serve.',
-        strYoutube: '',
-        strIngredient1: 'Ribs', strMeasure1: '1kg',
-        strIngredient2: 'BBQ Sauce', strMeasure2: '1 cup',
-        strIngredient3: '', strMeasure3: '',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1012',
-        strMeal: 'Mac and Cheese',
-        strCategory: 'Vegetarian',
-        strArea: 'American',
-        strMealThumb: 'https://images.pexels.com/photos/1438672/pexels-photo-1438672.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Cook pasta. Make cheese sauce. Combine. Bake.',
-        strYoutube: '',
-        strIngredient1: 'Pasta', strMeasure1: '400g',
-        strIngredient2: 'Cheese', strMeasure2: '300g',
-        strIngredient3: '', strMeasure3: '',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1013',
-        strMeal: 'Tacos',
-        strCategory: 'Beef',
-        strArea: 'Mexican',
-        strMealThumb: 'https://images.pexels.com/photos/2092507/pexels-photo-2092507.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Cook beef with spices. Warm tortillas. Assemble tacos with toppings.',
-        strYoutube: '',
-        strIngredient1: 'Beef', strMeasure1: '500g',
-        strIngredient2: 'Tortillas', strMeasure2: '8',
-        strIngredient3: 'Cheese', strMeasure3: '1 cup',
-        strIngredient4: '', strMeasure4: '',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1014',
-        strMeal: 'Chicken Tikka Masala',
-        strCategory: 'Chicken',
-        strArea: 'Indian',
-        strMealThumb: 'https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Marinate chicken in yogurt and spices. Grill. Make tomato cream sauce. Combine.',
-        strYoutube: '',
-        strIngredient1: 'Chicken', strMeasure1: '600g',
-        strIngredient2: 'Yogurt', strMeasure2: '1 cup',
-        strIngredient3: 'Tomatoes', strMeasure3: '400g',
-        strIngredient4: 'Cream', strMeasure4: '1/2 cup',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1015',
-        strMeal: 'Spaghetti Carbonara',
-        strCategory: 'Pork',
-        strArea: 'Italian',
-        strMealThumb: 'https://bing.com/th?id=OSK.9bb7c9c9d65768b314ee54c697d4ad4c',
-        strInstructions: 'Cook spaghetti. Fry bacon. Mix eggs and cheese. Combine all with pasta water.',
-        strYoutube: '',
-        strIngredient1: 'Spaghetti', strMeasure1: '400g',
-        strIngredient2: 'Bacon', strMeasure2: '200g',
-        strIngredient3: 'Eggs', strMeasure3: '3',
-        strIngredient4: 'Parmesan', strMeasure4: '1 cup',
-        strIngredient5: '', strMeasure5: '',
-        strIngredient6: '', strMeasure6: '',
-        strIngredient7: '', strMeasure7: '',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
-    },
-    {
-        idMeal: '1016',
-        strMeal: 'Chocolate Cake',
-        strCategory: 'Dessert',
-        strArea: 'American',
-        strMealThumb: 'https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=400',
-        strInstructions: 'Preheat oven to 180°C. Mix flour, sugar, cocoa powder, baking soda, and salt. In another bowl, beat eggs, milk, oil, and vanilla. Combine wet and dry ingredients. Pour into greased pan. Bake for 30-35 minutes. Cool and frost with chocolate frosting.',
-        strYoutube: '',
-        strIngredient1: 'Flour', strMeasure1: '2 cups',
-        strIngredient2: 'Sugar', strMeasure2: '2 cups',
-        strIngredient3: 'Cocoa Powder', strMeasure3: '3/4 cup',
-        strIngredient4: 'Eggs', strMeasure4: '2',
-        strIngredient5: 'Milk', strMeasure5: '1 cup',
-        strIngredient6: 'Oil', strMeasure6: '1/2 cup',
-        strIngredient7: 'Vanilla', strMeasure7: '2 tsp',
-        strIngredient8: '', strMeasure8: '',
-        strIngredient9: '', strMeasure9: '',
-        strIngredient10: '', strMeasure10: ''
+        strIngredient3: 'Paprika', strMeasure3: '2 tbsp'
     }
 ];
 
 const searchRecipes = async (query) => {
-    return FALLBACK_RECIPES.filter(recipe => 
-        recipe.strMeal.toLowerCase().includes(query.toLowerCase())
-    );
+    try {
+        const url = buildApiUrl(CONFIG.ENDPOINTS.SEARCH, { s: query });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('API Error');
+        const data = await response.json();
+        const apiResults = data.meals || [];
+        const nigerianMatches = NIGERIAN_RECIPES.filter(r => r.strMeal.toLowerCase().includes(query.toLowerCase()));
+        return [...apiResults, ...nigerianMatches];
+    } catch (error) {
+        console.error('Search Error:', error);
+        throw error;
+    }
 };
 
 const filterByCuisine = async (cuisine) => {
-    if (cuisine === 'all') return FALLBACK_RECIPES;
-    return FALLBACK_RECIPES.filter(r => r.strArea.toLowerCase() === cuisine.toLowerCase());
+    try {
+        if (cuisine.toLowerCase() === 'nigerian') return NIGERIAN_RECIPES;
+        if (cuisine === 'all') {
+            const url = buildApiUrl(CONFIG.ENDPOINTS.SEARCH, { s: '' });
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('API Error');
+            const data = await response.json();
+            return [...(data.meals ? data.meals.slice(0, 20) : []), ...NIGERIAN_RECIPES];
+        }
+        const url = buildApiUrl(CONFIG.ENDPOINTS.FILTER_BY_AREA, { a: cuisine });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('API Error');
+        const data = await response.json();
+        if (!data.meals) return [];
+        const detailedMeals = await Promise.all(data.meals.slice(0, 12).map(m => getRecipeDetails(m.idMeal)));
+        return detailedMeals.filter(m => m !== null);
+    } catch (error) {
+        console.error('Cuisine Error:', error);
+        throw error;
+    }
 };
 
 const filterByCategory = async (category) => {
-    return FALLBACK_RECIPES.filter(r => r.strCategory.toLowerCase() === category.toLowerCase());
+    try {
+        const url = buildApiUrl(CONFIG.ENDPOINTS.FILTER_BY_CATEGORY, { c: category });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('API Error');
+        const data = await response.json();
+        if (!data.meals) return NIGERIAN_RECIPES.filter(r => r.strCategory.toLowerCase() === category.toLowerCase());
+        const detailedMeals = await Promise.all(data.meals.slice(0, 12).map(m => getRecipeDetails(m.idMeal)));
+        const nigerianMatches = NIGERIAN_RECIPES.filter(r => r.strCategory.toLowerCase() === category.toLowerCase());
+        return [...detailedMeals.filter(m => m !== null), ...nigerianMatches];
+    } catch (error) {
+        console.error('Category Error:', error);
+        throw error;
+    }
 };
 
 const getRecipeDetails = async (recipeId) => {
-    return FALLBACK_RECIPES.find(r => r.idMeal === recipeId) || FALLBACK_RECIPES[0];
+    try {
+        const nigerian = NIGERIAN_RECIPES.find(r => r.idMeal === recipeId);
+        if (nigerian) return nigerian;
+        const url = buildApiUrl(CONFIG.ENDPOINTS.MEAL_DETAILS, { i: recipeId });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('API Error');
+        const data = await response.json();
+        return data.meals ? data.meals[0] : null;
+    } catch (error) {
+        console.error('Details Error:', error);
+        return null;
+    }
 };
 
 const getInitialRecipes = async () => {
-    return FALLBACK_RECIPES;
+    try {
+        const url = buildApiUrl(CONFIG.ENDPOINTS.SEARCH, { s: 'chicken' });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('API Error');
+        const data = await response.json();
+        return [...(data.meals ? data.meals.slice(0, 12) : []), ...NIGERIAN_RECIPES];
+    } catch (error) {
+        console.error('Initial Error:', error);
+        throw error;
+    }
 };

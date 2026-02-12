@@ -58,7 +58,7 @@ body {
 
 /* Header */
 .header {
-   background: linear-gradient(135deg, #52796f 0%, #354f52 100%);
+    background: linear-gradient(135deg, #52796f 0%, #354f52 100%);
     padding: 3rem 0;
     box-shadow: var(--shadow-lg);
     position: relative;
@@ -302,7 +302,13 @@ body {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading p {
+    color: var(--text-secondary);
+    font-size: 1rem;
 }
 
 /* Error State */
@@ -310,9 +316,10 @@ body {
     display: none;
     text-align: center;
     padding: 4rem 2rem;
-    background-color: var(--surface);
+    background-color: #fff3cd;
     border-radius: 16px;
-    border: 1px solid var(--border-color);
+    border: 1px solid #ffc107;
+    margin: 2rem 0;
 }
 
 .error-state.show {
@@ -325,13 +332,14 @@ body {
 }
 
 .error-state h3 {
-    color: var(--error);
+    color: #856404;
     margin-bottom: 0.5rem;
     font-size: 1.5rem;
 }
 
 .error-state p {
-    color: var(--text-secondary);
+    color: #856404;
+    font-weight: 500;
 }
 
 /* Empty State */
